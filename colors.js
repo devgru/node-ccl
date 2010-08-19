@@ -27,7 +27,7 @@ var extras = {
     reversed: 7
 }
 
-var esc = function(str) { return "\x1B["+str+'m'; }
+var esc = function(str) { return "\x1B[" + str + 'm'; }
 
 this.reset = esc(0);
 
