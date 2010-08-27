@@ -57,4 +57,3 @@ for (var e in extras) {
     }
 }
 
-console.log(this.bold.red + "asd" + this.generate('yellow','black','bold') + "asfvsd");
