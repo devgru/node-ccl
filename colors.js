@@ -11,15 +11,18 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 //taken from http://github.com/chrislloyd/colored.js
 
 var colors = {
-    black: 30,
-    red: 31,
-    green: 32,
-    yellow: 33,
-    blue: 34,
-    magenta: 35,
-    cyan: 36,
-    white: 37
+    black: 0,
+    red: 1,
+    green: 2,
+    yellow: 3,
+    blue: 4,
+    magenta: 5,
+    cyan: 6,
+    white: 7
 }
+
+var fg = {}
+var bg = {}
 
 var extras = {
     bold: 1,
@@ -27,9 +30,13 @@ var extras = {
     reversed: 7
 }
 
-var esc = function(str) { return "\x1B[" + str + 'm'; }
+var esc = function (str) { return "\x1B[" + str + 'm'; }
 
 this.reset = esc(0);
+
+this.generate = function (fore, back, extra) {
+    return esc(fg[fore] + ';' + bg[back] + extras[extra];
+}
 
 for (var c in colors) {
     exports[c] = esc(colors[c]);
@@ -38,6 +45,6 @@ for (var c in colors) {
 for (var e in extras) {
     exports[e] = [];
     for (var c in colors) {
-        exports[e][c] = esc(extras[e] + ';' + colors[c]);
+        exports[e][c] = esc(extras[e] + ';' + fg[c]);
     }
 }
