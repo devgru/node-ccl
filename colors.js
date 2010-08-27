@@ -47,6 +47,6 @@ for (var c in colors) {
 for (var e in extras) {
     exports[e] = [];
     for (var c in colors) {
-        exports[e][c] = esc(extras[e] + ';' + fg[c]);
+        exports[e][c] = esc(extras[e] + ';' + this.fg[c]);
     }
 }
