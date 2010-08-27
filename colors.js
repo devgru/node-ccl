@@ -37,7 +37,7 @@ this.bg = {};
 this.reset = esc(0);
 
 this.generate = function (fore, back, extra) {
-    return esc(fg[fore] + ';' + bg[back] + extras[extra];
+    return esc(fg[fore] + ';' + bg[back] + extras[extra]);
 }
 
 for (var c in colors) {
