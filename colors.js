@@ -35,11 +35,12 @@ this.bg = {};
 this.reset = esc(0);
 
 this.generate = function (fore, back, extra) {
-    return esc(fg[fore] + ';' + bg[back] + ';' + extras[extra]);
+    return esc(this.fg[fore] + ';' + this.bg[back] + ';' + extras[extra]);
 }
 
 for (var c in colors) {
     exports[c] = esc(colors[c] + 30);
+    console.log(exports[c]);
     exports.fg[c] = exports[c];
     exports.bg[c] = esc(colors[c] + 40);
 }
