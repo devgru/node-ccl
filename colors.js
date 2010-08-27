@@ -32,6 +32,8 @@ var extras = {
 
 var esc = function (str) { return "\x1B[" + str + 'm'; }
 
+this.fg = {};
+this.bg = {};
 this.reset = esc(0);
 
 this.generate = function (fore, back, extra) {
@@ -39,7 +41,9 @@ this.generate = function (fore, back, extra) {
 }
 
 for (var c in colors) {
-    exports[c] = esc(colors[c]);
+    exports[c] = esc(colors[c] + 30);
+    exports.fg[c] = exports[c];
+    exports.bg[c] = esc(colors[c] + 40);
 }
 
 for (var e in extras) {
