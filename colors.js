@@ -21,13 +21,14 @@ var colors = {
     white: 7
 }
 
-
 var extras = {
     bold: 1,
     underline: 4,
     reversed: 7
 }
 
+var fg = {}
+var bg = {}
 var esc = function (str) { return "\x1B[" + str + 'm'; }
 
 this.fg = {};
@@ -35,19 +36,25 @@ this.bg = {};
 this.reset = esc(0);
 
 this.generate = function (fore, back, extra) {
-    return esc(this.fg[fore] + ';' + this.bg[back] + ';' + extras[extra]);
+    if (extra)
+        return esc(fg[fore] + ';' + bg[back] + ';' + extras[extra]);
+    else
+        return esc(fg[fore] + ';' + bg[back]);
 }
 
 for (var c in colors) {
-    exports[c] = esc(colors[c] + 30);
-    console.log(exports[c]);
-    exports.fg[c] = exports[c];
-    exports.bg[c] = esc(colors[c] + 40);
+    fg[c] = colors[c] + 30;
+    this[c] = esc(fg[c]);
+    this.fg[c] = this[c];
+    bg[c] = colors[c] + 40;
+    this.bg[c] = esc(bg[c]);
 }
 
 for (var e in extras) {
-    exports[e] = [];
+    this[e] = [];
     for (var c in colors) {
-        exports[e][c] = esc(extras[e] + ';' + this.fg[c]);
+        this[e][c] = esc(extras[e] + ';' + fg[c]);
     }
 }
+
+console.log(this.bold.red + "asd" + this.generate('yellow','black','bold') + "asfvsd");
