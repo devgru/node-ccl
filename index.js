@@ -1,11 +1,11 @@
 var colors = require('./colors.js');
 
-this.forContext = function (context, color) { return new logger(context, color) };
-this.setPadding = function (padding) { logger.padding = padding; };
+this.forContext = function (context, color) { return new Logger(context, color) };
+this.setPadding = function (padding) { Logger.padding = padding; };
 
-var logger = function (context, contextColor) {
+var Logger = function (context, contextColor) {
 
-    logger.padding = Math.max(logger.padding, context.length);
+    Logger.padding = Math.max(Logger.padding, context.length);
 
     contextColor = contextColor ? colors.bold[contextColor] : colors.bold.white;
 
@@ -16,7 +16,7 @@ var logger = function (context, contextColor) {
     }
 
     var doPadding = function () {
-        while (context.length < logger.padding) {
+        while (context.length < Logger.padding) {
             if (context.length % 2) context += ' ';
             else context = ' ' + context;
         }
@@ -25,9 +25,11 @@ var logger = function (context, contextColor) {
     var colorize = function (text, color) { return color + text + colors.reset; }
 
     this.info   = function (text) { log(text, colors.white); };
-    this.debug  = function (text) { log(text, colors.cyan); }
+    this.debug  = function (text) { if (showDebug) log(text, colors.cyan); }
     this.error  = function (text) { log(text, colors.bold.red); };
     this.call   = null;
+
+    this.showDebug = true;
 }
 
-logger.padding = 0; //tune it if you need
+Logger.padding = 0; //tune it if you need
