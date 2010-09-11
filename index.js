@@ -13,19 +13,19 @@ var Logger = function (context, contextColor) {
         if (typeof(text) == "object") text = JSON.stringify(text);
         doPadding();
         console.log('[' + colorize(context, contextColor) + '] ' + colorize(text, textColor));
-    }
+    };
 
     var doPadding = function () {
         while (context.length < Logger.padding) {
             if (context.length % 2) context += ' ';
             else context = ' ' + context;
         }
-    }
+    };
 
-    var colorize = function (text, color) { return color + text + colors.reset; }
+    var colorize = function (text, color) { return color + text + colors.reset; };
 
     this.info   = function (text) { log(text, colors.white); };
-    this.debug  = function (text) { if (showDebug) log(text, colors.cyan); }
+    this.debug  = function (text) { if (this.showDebug) log(text, colors.cyan); };
     this.error  = function (text) { log(text, colors.bold.red); };
     this.call   = null;
 
