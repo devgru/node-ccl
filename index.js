@@ -1,7 +1,7 @@
 var colors = require('./colors.js');
 
-this.forContext = function (context, color) { return new Logger(context, color) };
-this.setPadding = function (padding) { Logger.padding = padding; };
+exports.forContext = function (context, color) { return new Logger(context, color) };
+exports.setPadding = function (padding) { Logger.padding = padding; };
 
 var Logger = function (context, contextColor) {
 
