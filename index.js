@@ -20,7 +20,7 @@ var Logger = function (context, contextColor) {
         return typeof(text) == "object" ? JSON.stringify(text) : text;
     };
     this.log = function (text, textColor) {
-        Logger.lastUsed && Logger.lastUsed != this && Logger.lastUsed.flush();
+        Logger.lastUsed && Logger.lastUsed != this && Logger.lastUsed.oldRawPrint && sys.puts('');//TODO DIRTY
         this.rawPrint(colorize(this.prepareText(text), textColor));
         Logger.lastUsed = this;
         return this;
@@ -36,8 +36,6 @@ var Logger = function (context, contextColor) {
     this.error  = function (text) { return this.log(text, colors.bold.red); };
     this.warn   = function (text) { return this.log(text, colors.yellow); };
 
-    this.flush = function () {};
-
     this.buffered = function (id) {
         if (typeof(id) == 'undefined') id = 'buffer';
         var mama = new Logger(this.context, contextColor);
@@ -48,7 +46,6 @@ var Logger = function (context, contextColor) {
             }
             sys.print(text + ' ');
         };
-        mama.flush = function () { sys.puts(''); }
         return mama;
     };
 
