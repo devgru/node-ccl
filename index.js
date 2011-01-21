@@ -4,28 +4,30 @@ var sys = require('sys');
 var Logger = function (context, contextColor) {
     Logger.padding = Math.max(Logger.padding, context.length);
 
+    this.context = context;
+
     var contextColorCode = contextColor ? colors.bold[contextColor] : colors.bold.white;
 
-    var that = this;
-    var doPadding = function () {
-        while (context.length < Logger.padding) {
-            context = context.length % 2 ? context + ' ' : ' ' + context;
+    this.doPadding = function () {
+        var ct = this.context;
+        while (ct.length < Logger.padding) {
+            this.context = ct.length % 2 ? ct + ' ' : ' ' + c;
         }
     };
-    var prepareText = function (text) {
-        doPadding();
+    this.prepareText = function (text) {
+        this.doPadding();
         return typeof(text) == "object" ? JSON.stringify(text) : text;
     };
     this.log = function (text, textColor) {
         if (Logger.lastUsed && Logger.lastUsed != this && Logger.lastUsed.flush) sys.puts('');
-        this.rawPrint(colorize(prepareText(text), textColor));
+        this.rawPrint(colorize(this.prepareText(text), textColor));
         Logger.lastUsed = this;
         return this;
     };
     var colorize = function (text, color) { return color + text + colors.reset; };
 
     this.rawPrint = function (text) {
-        console.log('[' + colorize(context, contextColorCode) + '] ' + text);
+        console.log('[' + colorize(this.context, contextColorCode) + '] ' + text);
     };
 
     this.info   = function (text) { return this.log(text, colors.white);};
@@ -35,11 +37,11 @@ var Logger = function (context, contextColor) {
 
     this.buffered = function (id) {
         if (typeof(id) == 'undefined') id = 'buffer';
-        var mama = new Logger(context, contextColor);
+        var mama = new Logger(this.context, contextColor);
         mama.oldRawPrint = mama.rawPrint;
         mama.rawPrint = function (text) {
             if (Logger.lastUsed != this) {
-             sys.print('[' + colorize(context, contextColorCode) + '] |' + id + '| ');
+                sys.print('[' + colorize(this.context, contextColorCode) + '] |' + id + '| ');
             }
             sys.print(text + ' ');
         };
