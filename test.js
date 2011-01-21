@@ -7,7 +7,12 @@ basic.error('test error');
 var chain = basic.buffered();
 chain.info('tap1').error('error').warn('waaarn');
 
-basic.info('asd');
-chain.error('test');
+var another = log.forContext('2', 'red');
+another.info('test1');
+
+basic.info('after buffer');
+another.info('test2');
+chain.error('test error');
 
 
+console.log('end');
