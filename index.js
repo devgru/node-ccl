@@ -11,7 +11,7 @@ var Logger = function (context, contextColor) {
     this.doPadding = function () {
         var ct = this.context;
         while (ct.length < Logger.padding) {
-            this.context = ct.length % 2 ? ct + ' ' : ' ' + c;
+            this.context = ct.length % 2 ? ct + ' ' : ' ' + ct;
         }
     };
     this.prepareText = function (text) {
