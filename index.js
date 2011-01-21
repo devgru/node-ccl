@@ -3,7 +3,7 @@ var colors = require('./colors.js');
 var Logger = function (context, contextColor) {
     Logger.padding = Math.max(Logger.padding, context.length);
 
-    contextColorCode = contextColor ? colors.bold[contextColor] : colors.bold.white;
+    var contextColorCode = contextColor ? colors.bold[contextColor] : colors.bold.white;
 
     var that = this;
     var doPadding = function () {
