@@ -1,4 +1,5 @@
 var colors = require('./colors.js');
+var sys = require('sys');
 
 var Logger = function (context, contextColor) {
     Logger.padding = Math.max(Logger.padding, context.length);
@@ -15,9 +16,11 @@ var Logger = function (context, contextColor) {
         doPadding();
         return typeof(text) == "object" ? JSON.stringify(text) : text;
     };
-    var log = function (text, textColor) {
-        that.rawPrint(colorize(prepareText(text), textColor));
-        return that;
+    this.log = function (text, textColor) {
+        if (Logger.lastUsed && Logger.lastUsed != this && Logger.lastUsed.flush) sys.puts('');
+        this.rawPrint(colorize(prepareText(text), textColor));
+        Logger.lastUsed = this;
+        return this;
     };
     var colorize = function (text, color) { return color + text + colors.reset; };
 
@@ -25,22 +28,23 @@ var Logger = function (context, contextColor) {
         console.log('[' + colorize(context, contextColorCode) + '] ' + text);
     };
 
-    this.info   = function (text) { return log(text, colors.white);};
-    this.debug  = function (text) { return this.showDebug ? log(text, colors.cyan) : this; };
-    this.error  = function (text) { return log(text, colors.bold.red); };
-    this.warn   = function (text) { return log(text, colors.yellow); };
+    this.info   = function (text) { return this.log(text, colors.white);};
+    this.debug  = function (text) { return this.showDebug ? this.log(text, colors.cyan) : this; };
+    this.error  = function (text) { return this.log(text, colors.bold.red); };
+    this.warn   = function (text) { return this.log(text, colors.yellow); };
 
-    this.buffered = function () {
-        var chain = new Logger(context, contextColor);
-        chain.buffer = '';
-        chain.oldRawPrint = chain.rawPrint;
-        chain.rawPrint = function (text) { this.buffer += text + ' '; };
-        chain.flush = function() {
-            chain.oldRawPrint(this.buffer);
-            this.buffer = '';
+    this.buffered = function (id) {
+        if (typeof(id) == 'undefined') id = 'buffer';
+        var mama = new Logger(context, contextColor);
+        mama.oldRawPrint = mama.rawPrint;
+        mama.rawPrint = function (text) {
+            if (Logger.lastUsed != this) {
+             sys.print('[' + colorize(context, contextColorCode) + '] |' + id + '| ');
+            }
+            sys.print(text + ' ');
         };
-
-        return chain;
+        mama.flush = sys.puts;
+        return mama;
     };
 
     this.showDebug = Logger.defaultShowDebug;
@@ -48,6 +52,7 @@ var Logger = function (context, contextColor) {
 
 Logger.padding = 0;
 Logger.defaultShowDebug = true;
+Logger.lastUsed = null;
 
 exports.forContext = function (context, color) { return new Logger(context, color); };
 exports.setPadding = function (padding) { Logger.padding = Math.max(padding, Logger.padding); };
