@@ -27,6 +27,7 @@ var Logger = function (context, contextColor) {
     this.info   = function (text) { log(text, colors.white); };
     this.debug  = function (text) { if (this.showDebug) log(text, colors.cyan); };
     this.error  = function (text) { log(text, colors.bold.red); };
+    this.warn   = function (text) { log(text, colors.yellow); };
     this.call   = null;
 
     this.showDebug = true;
