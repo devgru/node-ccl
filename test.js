@@ -15,4 +15,3 @@ another.info('test2');
 chain.error('test error');
 
 
-console.log('end');
