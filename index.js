@@ -20,7 +20,10 @@ var Logger = function (context, contextColor) {
         return typeof(text) == "object" ? JSON.stringify(text) : text;
     };
     this.log = function (text, textColor) {
-        Logger.lastUsed && Logger.lastUsed != this && Logger.lastUsed.oldRawPrint && sys.puts('');//TODO DIRTY
+        var last = Logger.lastUsed;
+        //console.log(!!last && !!last.id && !this.equals(last));
+        //!!last && !!last.id && console.log(last.id);
+        !!last && !!last.id && !this.equals(last) && sys.puts('');//TODO DIRTY
         this.rawPrint(colorize(this.prepareText(text), textColor));
         Logger.lastUsed = this;
         return this;
@@ -39,14 +42,20 @@ var Logger = function (context, contextColor) {
     this.buffered = function (id) {
         if (typeof(id) == 'undefined') id = 'buffer';
         var mama = new Logger(this.context, contextColor);
+        mama.id = id
         mama.oldRawPrint = mama.rawPrint;
         mama.rawPrint = function (text) {
-            if (Logger.lastUsed != this) {
+            var last = Logger.lastUsed;
+            if (!this.equals(last)) {
                 sys.print('[' + colorize(this.context, contextColorCode) + '] ' + colorize('|' + id + '|', colors.bold.white) + ' ');
             }
             sys.print(text + ' ');
         };
         return mama;
+    };
+
+    this.equals = function (logger) {
+        return !!logger && this.context == logger.context && (!!this.id == !!logger.id) && (!this.id || this.id == logger.id);
     };
 
     this.showDebug = Logger.defaultShowDebug;
