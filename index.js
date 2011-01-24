@@ -21,8 +21,6 @@ var Logger = function (context, contextColor) {
     };
     this.log = function (text, textColor) {
         var last = Logger.lastUsed;
-        //console.log(!!last && !!last.id && !this.equals(last));
-        //!!last && !!last.id && console.log(last.id);
         !!last && !!last.id && !this.equals(last) && sys.puts('');//TODO DIRTY
         this.rawPrint(colorize(this.prepareText(text), textColor));
         Logger.lastUsed = this;
