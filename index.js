@@ -15,10 +15,12 @@ var Logger = function (context, contextColor) {
         }
         this.context = ct;
     };
+
     this.prepareText = function (text) {
         this.doPadding();
         return typeof(text) == "object" ? JSON.stringify(text) : text;
     };
+
     this.log = function (text, textColor) {
         var last = Logger.lastUsed;
         !!last && !!last.id && !this.equals(last) && sys.puts('');//TODO DIRTY
@@ -26,13 +28,14 @@ var Logger = function (context, contextColor) {
         Logger.lastUsed = this;
         return this;
     };
+
     var colorize = function (text, color) { return color + text + colors.reset; };
 
     this.rawPrint = function (text) {
         console.log('[' + colorize(this.context, contextColorCode) + '] ' + text);
     };
 
-    this.info   = function (text) { return this.log(text, colors.white);};
+    this.info   = function (text) { return this.log(text, colors.white); };
     this.debug  = function (text) { return this.showDebug ? this.log(text, colors.cyan) : this; };
     this.error  = function (text) { return this.log(text, colors.bold.red); };
     this.warn   = function (text) { return this.log(text, colors.yellow); };
@@ -40,7 +43,7 @@ var Logger = function (context, contextColor) {
     this.buffered = function (id) {
         if (typeof(id) == 'undefined') id = 'buffer';
         var mama = new Logger(this.context, contextColor);
-        mama.id = id
+        mama.id = id;
         mama.oldRawPrint = mama.rawPrint;
         mama.rawPrint = function (text) {
             var last = Logger.lastUsed;

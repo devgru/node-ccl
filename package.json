@@ -1,0 +1,16 @@
+{
+    "name": "node-ccl",
+    "version": "0.0.1",
+
+    "author": "Devgru <git@devg.ru> (http://home.devg.ru)",
+    "repository": { "type": "git", "url": "http://github.com/devgru/node-ccl.git" },
+
+    "description": "BETA VERSION, USE ON YOUR OWN RISK. Colored, context-enabled logger.",
+    "keywords": [ "logging" ],
+
+    "modules": { "index.js": "index.js",
+                 "colors.js": "colors.js"
+               },
+
+    "engines": [ "node" ]
+}
