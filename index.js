@@ -1,18 +1,19 @@
 var colors = require('./colors.js');
 var sys = require('sys');
 
+require('./date.format.js');
+
 var Logger = function (context, contextColor) {
     Logger.padding = Math.max(Logger.padding, context.length);
-
-    this.context = context;
 
     var contextColorCode = contextColor ? colors.bold[contextColor] : colors.bold.white;
 
     this.doPadding = function () {
-        var ct = this.context;
+        var ct = context;
         while (ct.length < Logger.padding) {
             ct = ct.length % 2 ? ct + ' ' : ' ' + ct;
         }
+        context = ct;
         this.context = ct;
     };
 
@@ -30,9 +31,14 @@ var Logger = function (context, contextColor) {
     };
 
     var colorize = function (text, color) { return color + text + colors.reset; };
+    this.header = function () {
+        return block(context, contextColorCode) +
+               block(new Date().format(this.dateFormat), colors[this.timeColor]);
+    };
+    var block = function (text, color) { return '[' + colorize(text, color) + '] '; };
 
     this.rawPrint = function (text) {
-        console.log('[' + colorize(this.context, contextColorCode) + '] ' + text);
+        console.log(this.header() + text);
     };
 
     this.info   = function (text) { return this.log(text, colors.white); };
@@ -42,13 +48,13 @@ var Logger = function (context, contextColor) {
 
     this.buffered = function (id) {
         if (typeof(id) == 'undefined') id = 'buffer';
-        var mama = new Logger(this.context, contextColor);
+        var mama = new Logger(context, contextColor);
         mama.id = id;
         mama.oldRawPrint = mama.rawPrint;
         mama.rawPrint = function (text) {
             var last = Logger.lastUsed;
             if (!this.equals(last)) {
-                sys.print('[' + colorize(this.context, contextColorCode) + '] ' + colorize('|' + id + '|', colors.bold.white) + ' ');
+                sys.print(this.header() + colorize('|' + id + '|', colors.bold.white) + ' ');
             }
             sys.print(text + ' ');
         };
@@ -56,16 +62,17 @@ var Logger = function (context, contextColor) {
     };
 
     this.equals = function (logger) {
-        return !!logger && this.context == logger.context && (!!this.id == !!logger.id) && (!this.id || this.id == logger.id);
+        return !!logger && context == logger.context && (!!this.id == !!logger.id) && (!this.id || this.id == logger.id);
     };
 
-    this.showDebug = Logger.defaultShowDebug;
+    this.dateFormat = "HH:MM:ss dd.mm";
+    this.showDebug = false;
+    this.appendDateTime = false;
+    this.timeColor = 'cyan';
 };
 
 Logger.padding = 0;
-Logger.defaultShowDebug = true;
 Logger.lastUsed = null;
 
 exports.forContext = function (context, color) { return new Logger(context, color); };
 exports.setPadding = function (padding) { Logger.padding = Math.max(padding, Logger.padding); };
-exports.setDefaultShowDebug = function (show) { Logger.defaultShowDebug = show; };
