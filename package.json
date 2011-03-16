@@ -1,6 +1,6 @@
 {
     "name": "node-ccl",
-    "version": "0.0.3",
+    "version": "0.0.4",
 
     "author": "Devgru <git@devg.ru> (http://home.devg.ru)",
     "repository": { "type": "git", "url": "http://github.com/devgru/node-ccl.git" },
