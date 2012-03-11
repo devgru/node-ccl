@@ -25,7 +25,7 @@ var Logger = function (context, contextColor) {
 
     this.log = function (text, textColor) {
         var last = Logger.lastUsed
-        !!last && !!last.id && !this.equals(last) && util.puts('') //TODO DIRTY
+        !this.equals(last) && util.puts('') //TODO DIRTY
         this.rawPrint(colorize(this.prepareText(text), textColor))
         Logger.lastUsed = this
         return this
@@ -70,15 +70,16 @@ var Logger = function (context, contextColor) {
         mama.rawPrint = function (text) {
             var last = Logger.lastUsed
             if (!this.equals(last)) {
-                util.print(this.header() + colorize('|' + id + '|', colors.bold.white) + ' ')
+                util.print(this.header())
             }
+            util.print(colorize('|' + id + '|', colors.bold.white) + ' ')
             util.print(text + ' ')
         }
         return mama
     }
 
     this.equals = function (logger) {
-        return !!logger && context == logger.context && (!!this.id == !!logger.id) && (!this.id || this.id == logger.id)
+        return !!logger && context == logger.context
     }
 
 }
