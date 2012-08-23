@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/devgru/node-ccl.png)](http://travis-ci.org/devgru/node-ccl)
 # node-ccl
 
 Colored, context-enabled logger.
